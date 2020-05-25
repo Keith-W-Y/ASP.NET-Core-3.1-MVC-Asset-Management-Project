@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "Search";
+}
+
+<br />
+<a href='@Url.Action("Index", "Home")' class="btn btn-primary">Back to Home Page</a>
+<br /><br />
+
+<h3>Search Asset Types</h3>
+
+<select id="uxAssetTypes" asp-items="ViewBag.AssetTypes"></select>
+
+<div id="uxDisplay">
+    @await Component.InvokeAsync("AssetsByType", 0)
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            $("#uxAssetTypes").change(function () {
+                var AssetTypeId = $("#uxAssetTypes").val();
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/Asset/GetAssetsByType',
+                    data: { id: AssetTypeId }       // AJAX call from view to controller (by passing id):  IActionResult GetAssetsByType(int id)
+                }).done(function (result, statusText, xhdr) {
+                    $("#uxDisplay").html(result);
+                });
+            });
+        });
+    </script>
+}
+
